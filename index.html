@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <meta charset="utf-8">
+  <title>简单轮播</title>
+  <style>
+    .images{ 
+      display: flex;
+      align-items: flex-start;
+      transition: transform 0.5s;
+    }
+    .images > img{
+
+    }
+    .window{
+      width: 480px;
+      height: 320px;
+      overflow: hidden;
+    }
+    .red{
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="images" id="images">
+      <img src="https://i.loli.net/2018/10/13/5bc1604f2a255.jpg" width=480 alt="">
+      <img src="https://i.loli.net/2018/10/13/5bc1604f3b560.jpg" width=480 alt="">
+      <img src="https://i.loli.net/2018/10/13/5bc1604f836b9.jpg" width=480 alt="">
+      <img src="https://i.loli.net/2018/10/13/5bc1604f83051.jpg" width=480 alt="">
+    </div>
+  </div>
+  <span id="buttons">
+    <span>第1张</span>
+    <span>第2张</span>
+    <span>第3张</span>
+    <span>第4张</span>
+  </span>
+  <script>
+    var allButtons = $('#buttons > span')
+    for( let i=0; i<allButtons.length; i++){
+      $(allButtons[i]).on('click',function(x){
+        var index = $(x.currentTarget).index()//index()可以得到当前元素在父元素下所有子元素中排在第几个，并返回这个值
+        var n = index*-480
+        $('#images').css({
+          transform: 'translateX('+ n + 'px)'
+        })
+        a = index
+        allButtons.eq(a)
+        .addClass('red')
+        .siblings('.red').removeClass('red') 
+      })
+    }
+
+    var a = 0
+    var size = allButtons.length
+    allButtons.eq(a%size).trigger('click')
+      .addClass('red')
+      .siblings('.red').removeClass('red')
+    //eq()找出对应的dom，封装成对应的 jQuery；trigger用于触发事件
+    var timerId = setInterval(()=>{
+      a += 1
+      allButtons.eq(a%size).trigger('click')
+      .addClass('red')
+      .siblings('.red').removeClass('red')
+    },3000) // 实现自动轮播；添加和删除class实现相应文字的高亮
+
+    $('.window').on('mouseenter',function(){
+      window.clearInterval(timerId)
+    })
+    $('.window').on('mouseleave',function(){
+      timerId = setInterval(()=>{
+        a += 1
+        allButtons.eq(a%size).trigger('click')
+        .addClass('red')
+        .siblings('.red').removeClass('red')
+      },3000)
+    })
+  </script>
+</body>
+</html>
